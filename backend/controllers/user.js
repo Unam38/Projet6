@@ -32,7 +32,7 @@ User.findOne({ email: req.body.email })
             userId: user._id,
             token: jwt.sign(
                 { userId: user._id },
-                'RANDOM_TOKEN_SECRET',
+                'Nimporùlksjdoh6548ljgvsdgh489vsvsùk',
                 { expiresIn: '24h' }
             )
         });

@@ -15,8 +15,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${
     .then(() => console.log('Connection à MongoDB réussie !'))
     .catch(() => console.log('Connection à MongoDB échouée'));
 
-//app.use(xss());
-//app.use(helmet());
+app.use(helmet());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
