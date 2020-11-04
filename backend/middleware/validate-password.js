@@ -10,10 +10,10 @@ passwordFormat.is().min(6)
 .has().not().spaces()
 .is().not().oneOf(['123456', '987654', 'password', 'Password']);
 
-module.exports = (req, req, next) => {
+module.exports = (res, req, next) => {
     if(passwordFormat.validate(req.body.password)){
         next();
     } else {
         res.status(400).json({error: 'mot de passe trop simple!' });
     }
-}
+};
