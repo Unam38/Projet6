@@ -3,12 +3,10 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
-
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
-
 const app = express();
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_COLL}?retryWrites=true&w=majority`,
     {useNewUrlParser: true,
@@ -17,7 +15,6 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${
     .catch(() => console.log('Connection à MongoDB échouée'));
 
 app.use(helmet());
-
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');

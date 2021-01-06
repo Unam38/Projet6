@@ -1,13 +1,14 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
-const sauce = require('../models/sauce');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
     const sauce = new Sauce({
       ...sauceObject,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      likes: 0,
+      dislikes: 0
     });
     sauce.save()
       .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
@@ -59,11 +60,11 @@ exports.addLikeDislike = (req, res, next) => {
         const userWantsToCancel = (req.body.like === 0);
         const userCanLike = (!sauce.usersLiked.includes(userId));
         const userCanDislike = (!sauce.usersDisliked.includes(userId));
-        const notTheFirstVote = (sauce.usersLiked.includes(userId) || sauce.usersDisliked.includes(userId));
+        const userCanCancel = (sauce.usersLiked.includes(userId) || sauce.usersDisliked.includes(userId));
         
         if (userWantsToLike && userCanLike) {sauce.usersLiked.push(userId)};
         if (userWantsToDislike && userCanDislike) {sauce.usersDisliked.push(userId)};
-        if (userWantsToCancel && notTheFirstVote) {
+        if (userWantsToCancel && userCanCancel) {
             if (sauce.usersLiked.includes(userId)) {
                 let index = sauce.usersLiked.indexOf(userId);
                 sauce.usersLiked.splice(index, 1);
@@ -72,8 +73,8 @@ exports.addLikeDislike = (req, res, next) => {
                 sauce.usersDisliked.splice(index, 1);
             }
         }
-        sauce.likes = sauce.usersLiked.length;
-        sauce.dislikes = sauce.usersDisliked.length;
+        sauce.likes = parseInt(sauce.usersLiked.length);
+        sauce.dislikes = parseInt(sauce.usersDisliked.length);
         const updatedSauce = sauce;
         updatedSauce.save();
         return updatedSauce;

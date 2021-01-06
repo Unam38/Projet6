@@ -10,7 +10,7 @@ passwordFormat.is().min(6)
 .has().not().spaces()
 .is().not().oneOf(['123456', '987654', 'password', 'Password']);
 
-module.exports = (res, req, next) => {
+module.exports = (req, res, next) => {
     if(passwordFormat.validate(req.body.password)){
         next();
     } else {
